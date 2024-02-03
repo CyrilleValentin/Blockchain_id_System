@@ -1,6 +1,9 @@
 import Image from "next/image";
 import { Form } from "./registration/page";
 import { Inter } from 'next/font/google'
+import { Navbar } from "@/components/ui/Navbar";
+import Provider from "@/components/Provider";
+
 const inter = Inter({ subsets: ['latin'] })
 // export default function Home() {
 //   return (
@@ -18,6 +21,9 @@ const inter = Inter({ subsets: ['latin'] })
     return (
       <html lang="en">
         <body className={inter.className}>
+        <Provider {...Navbar}>
+        
+        </Provider>
           <Form/>
         
         </body>

@@ -13,34 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-export function BirthDate() {
-  const [date, setDate] = React.useState<Date>()
 
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant={"outline"}
-          className={cn(
-            "w-[280px] justify-start text-left font-normal",
-            !date && "text-muted-foreground"
-          )}
-        >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Birth Date</span>}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          initialFocus
-        />
-      </PopoverContent>
-    </Popover>
-  )
-}
 
 export function ManufactureDate() {
   const [date, setDate] = React.useState<Date>()
