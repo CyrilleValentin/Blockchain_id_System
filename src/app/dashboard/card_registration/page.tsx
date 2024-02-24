@@ -2,8 +2,6 @@
 import * as React from "react"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
-import { FilePond, registerPlugin } from 'react-filepond'
-import { FilePondFile } from "filepond"
 import 'filepond/dist/filepond.min.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import { cn } from "@/lib/utils"
@@ -28,7 +26,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
+import { useToast } from "@/components/ui/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 
 const formSchema = z.object({
     Idnum: z.string(),
@@ -59,6 +58,7 @@ export default function ProfileForm() {
     const [birthDate, setBirthDate] = React.useState<Date>()
     const [madeDate, setMadeDate] = React.useState<Date>()
     const [expireDate, setExpireDate] = React.useState<Date>()
+    const { toast } = useToast()
 
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
@@ -75,7 +75,6 @@ export default function ProfileForm() {
 
     })
 
-    // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const updatedValues = {
             ...values, birthDate: birthDate, madeDate: madeDate, expireDate: expireDate
@@ -85,34 +84,38 @@ export default function ProfileForm() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                //   'API-Key': process.env.DATA_API_KEY!,
             },
             body: JSON.stringify(updatedValues),
+        }).then(response => {
+            if (response.ok) {
+                toast({
+                    description: "Your card has been saved.",
+                })
+            }
+            else {
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: "There was a problem with your request.",
+                    action: <ToastAction altText="Try again">Try again</ToastAction>,
+                })
+
+            }
         })
+        
         console.log(request);
-        const { PINATA_API_KEY, PINATA_API_SECRET, PINATA_JWT } = process.env;
-        // const pinataConfig:PinataConfig ={
-        //     pinataApiKey:PINATA_API_KEY,
-        //     pinataSecretApiKey:PINATA_API_SECRET,
-        //     pinataJWTKey:PINATA_JWT
-
-        // }
-        // const pinata = new PinataClient(pinataConfig);
-        // pinata.pinFileToIPFS( formSchema).then((result: any) => {   
-        //     //handle results here
-        //     console.log(result);
-        // }).catch((err: any) => {
-        //     //handle error here
-        //     console.log(err);
-        // });
-
+        setBirthDate(undefined);
+        setMadeDate(undefined);
+        setExpireDate(undefined);
+        form.setValue("gender", "Select a gender");
+        form.reset();
     }
 
     return (
-        <main className="bg-red-400 w-[60rem] h-[30rem] flex justify-center items-center flex-col">
-            <h1>Id Card Registration</h1>
+        <main className=" w-[55rem] h-[28rem] flex justify-center items-center flex-col">
+            <h1 className="text-6xl mb-8 font-bold ">ID CARD REGISTRATION</h1>
             <Form {...form}>
-                <form className="bg-blue-300 w-[50rem]" onSubmit={form.handleSubmit(onSubmit)} >
+                <form className="w-[50rem]" onSubmit={form.handleSubmit(onSubmit)} >
                     <div className="flex flex-row gap-2 mb-2 ">
                         <FormField
                             control={form.control}
@@ -222,7 +225,7 @@ export default function ProfileForm() {
                             )}
                         />
                     </div>
-                    <div className="flex flex-row gap-2">
+                    <div className="flex flex-row gap-2 mb-1">
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button
@@ -274,7 +277,7 @@ export default function ProfileForm() {
                         control={form.control}
                         name="image"
                         render={({ field }) => (
-                            <FormItem className="w-full">
+                            <FormItem className="w-full mb-1">
                                 <FormControl>
                                     <Input className="text-black" accept="image/png, image/jpeg, image/gif" type="file" {...field} />
                                 </FormControl>
@@ -283,7 +286,9 @@ export default function ProfileForm() {
                         )}
                     />
                     <div className="w-full flex justify-end">
-                        <Button type="submit">Submit</Button>
+                        <Button className="w-44 " onClick={() => {
+
+                        }} type="submit">Submit</Button>
 
                     </div>
 

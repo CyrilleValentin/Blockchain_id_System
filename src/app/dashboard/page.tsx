@@ -1,28 +1,59 @@
- 
-export default async function Page() {
-   
+"use client";
+import { Card } from "@/components/cards";
 
-   
-    
+import { ethers } from "ethers";
+import React from "react";
+import abi from "@/utils/abi.json";
+
+export default function Page() {
+  const [contract, setContract] = React.useState<ethers.Contract | null>(null)
+  const [provider, setProvider] = React.useState<ethers.providers.Web3Provider | null>(null)
+  const [signer, setSigner] = React.useState<ethers.providers.JsonRpcSigner | null | undefined>(null)
+
+
+  async function getAccount() {
+    const accounts = await window.ethereum
+      .request({ method: "eth_requestAccounts" })
+      .catch((err: { code: number; }) => {
+        if (err.code === 4001) {
+          // EIP-1193 userRejectedRequest error
+          // If this happens, the user rejected the connection request.
+          console.log("Please connect to MetaMask.");
+        } else {
+          console.error(err);
+        }
+      });
+    const account = accounts[0];
+    console.log(account);
+  }
+  React.useEffect(() => {
+    getAccount()
+    const newProvider = new ethers.providers.Web3Provider(window.ethereum, "any")
+
+    const newSigner = newProvider?.getSigner()
+    setSigner(newSigner)
+    setProvider(newProvider)
+
+    const verifierContract = new ethers.Contract("0xA76361bfe70b53697Ef90876e2E386Cf05327488", abi, newSigner)
+      setContract(verifierContract)
+    // }
+  }, [])
+
+  async function getUri() {
+    // await contract?.connect(signer)
+    console.log(contract)
+    const uri = await contract?.grantVerifierRole("0x8298F4605f9893F80966826B8a301c963d0FC514")
+    console.log(uri)
+  }
+  // const {contract}= useContract("0x7da3A33AdeaBC37f8F362fDd804573b382704D98");
+  // const {j
+  //   data:baseuri,
+  //   isLoading
+  // }= useContractRead(contract,"getRoleAdmin")
+
   return (
-    <main>
-      <h1 className={`mb-4 text-xl md:text-2xl`}>
-        Dashboard
-      </h1>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {/* <Card title="Collected" value={cardData.totalPaidInvoices} type="collected" /> 
-        <Card title="Pending" value={cardData.totalPendingInvoices} type="pending" />
-         <Card title="Total Invoices" value={cardData.numberOfInvoices} type="invoices" />
-        <Card
-          title="Total Customers"
-          value={cardData.numberOfCustomers}
-          type="customers"
-        /> */}
-      </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-        {/* <RevenueChart revenue={revenue}  />
-        <LatestInvoices latestInvoices={latestInvoices} /> */}
-      </div>
+    <main className="">
+      <button onClick={() => getUri()}>Make call</button>
     </main>
   );
 }
