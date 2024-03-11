@@ -16,8 +16,6 @@ export default function Page() {
       .request({ method: "eth_requestAccounts" })
       .catch((err: { code: number; }) => {
         if (err.code === 4001) {
-          // EIP-1193 userRejectedRequest error
-          // If this happens, the user rejected the connection request.
           console.log("Please connect to MetaMask.");
         } else {
           console.error(err);
@@ -34,22 +32,16 @@ export default function Page() {
     setSigner(newSigner)
     setProvider(newProvider)
 
-    const verifierContract = new ethers.Contract("0xA76361bfe70b53697Ef90876e2E386Cf05327488", abi, newSigner)
+    const verifierContract = new ethers.Contract("0x3880c8e964f350c2b8baa5b916d0516380fa1489", abi, newSigner)
       setContract(verifierContract)
-    // }
   }, [])
 
   async function getUri() {
-    // await contract?.connect(signer)
     console.log(contract)
-    const uri = await contract?.grantVerifierRole("0x8298F4605f9893F80966826B8a301c963d0FC514")
+    const uri = await contract?.grantIssuerRole("0x8298F4605f9893F80966826B8a301c963d0FC514")
     console.log(uri)
   }
-  // const {contract}= useContract("0x7da3A33AdeaBC37f8F362fDd804573b382704D98");
-  // const {j
-  //   data:baseuri,
-  //   isLoading
-  // }= useContractRead(contract,"getRoleAdmin")
+ 
 
   return (
     <main className="">
