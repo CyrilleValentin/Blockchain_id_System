@@ -38,7 +38,7 @@ export default function Page() {
 
   async function getUri() {
     console.log(contract)
-    const uri = await contract?.grantIssuerRole("0x8298F4605f9893F80966826B8a301c963d0FC514")
+    const uri = await contract?.grantVerifierRole("0x8298F4605f9893F80966826B8a301c963d0FC514")
     console.log(uri)
   }
  

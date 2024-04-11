@@ -29,6 +29,8 @@ import { useToast } from "@/components/ui/use-toast"
 import { ToastAction } from "@/components/ui/toast"
 import { StateContext } from "@/components/Provider"
 
+import { useQRCode } from 'next-qrcode'
+import { AlertDialogDemo } from "@/components/qrCode"
 
 const formSchema = z.object({
     Idnum: z.string(),
@@ -62,6 +64,8 @@ export default function ProfileForm() {
     const [expireDate, setExpireDate] = React.useState<Date>()
     const { toast } = useToast()
     const { contract, provider, signer } = useContext(StateContext)
+    const [Hash, setHash] = React.useState<String>("");
+    const { Image } = useQRCode()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -98,26 +102,25 @@ export default function ProfileForm() {
         }).then(async response => {
             if (response.ok) {
                 const data = await response.json();
-                await setDocument(data?.image, data?.document).then(async (tx) => {
-                    console.log(tx.hash)
-                    if (tx.hash) {
-                        const request = await fetch('/saveCard', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(data),
-
-                        })
-
-                    }
-                    console.log(tx.confirmations)
-
-                })
+                // await setDocument(data?.image, data?.document).then(async (tx) => {
+                //     console.log(tx.hash)
+                //     setHash(tx.Hash)
+                //     if (tx.hash) {
+                //         const request = await fetch('/saveCard', {
+                //             method: 'POST',
+                //             headers: {
+                //                 'Content-Type': 'application/json',
+                //             },
+                //             body: JSON.stringify(data),
+                //         })
+                //     }
+                // })
                 toast({
                     description: "Your card has been saved.",
                 })
                 setIsLoading(false)
+
+            
             }
             else {
                 toast({
@@ -138,9 +141,6 @@ export default function ProfileForm() {
         form.setValue("gender", "Select a gender");
         form.reset();
     }
-
-
-
 
 
     return (
@@ -317,11 +317,31 @@ export default function ProfileForm() {
                             </FormItem>
                         )}
                     />
+                    <div className="qr">
+                     
+                         <Image
+                         text={`QmXJqipVU8DU3Kpy5ebVsLriwRdrRbkejLhaNa8FFYf9tQ`}
+                         options={{
+                             type: 'image/jpeg',
+                             quality: 0.3,
+                             errorCorrectionLevel: 'M',
+                             margin: 3,
+                             scale: 4,
+                             width: 200,
+                             color: {
+                                 dark: '#010599FF',
+                                 light: '#FFBF60FF',
+                             },
+                         }}
+                     />
+                        
+                    </div>
+
                     <div className="w-full flex justify-end">
-                        <Button className="w-44 " onClick={() => { }} type="submit"> 
-                        {isLoading? <Loader className="animate-spin" />:
-                        "Submit"}                          
-                           
+                        <Button className="w-44 " onClick={() => { }} type="submit">
+                            {isLoading ? <Loader className="animate-spin" /> :
+                                "Submit"}
+
                         </Button>
 
                     </div>

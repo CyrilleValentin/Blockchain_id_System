@@ -13,7 +13,7 @@ const links = [
     href: '/dashboard/card_registration'
   },
   { name: 'Issuer Role', href: '/dashboard/issuer_role' },
-  { name: ' Card Checker List', href: '/dashboard/list_verifier' },
+  { name: 'Scan Page', href: '/dashboard/scan_page' },
 ];
 
 export default function NavLinks() {
