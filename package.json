@@ -55,6 +55,9 @@
   "@radix-ui/react-toast": "^1.1.5",
   
     
+  "@react-pdf/renderer": "^3.4.2",
+  
+    
   "@thirdweb-dev/react": "^4.4.5",
   
     
@@ -79,7 +82,13 @@
   "fs": "^0.0.1-security",
   
     
+  "html-pdf": "^3.0.1",
+  
+    
   "html5-qrcode": "^2.3.8",
+  
+    
+  "jspdf": "^2.5.1",
   
     
   "lucide-react": "^0.312.0",
@@ -123,6 +132,9 @@
   },
   
   "devDependencies": {
+  
+    
+  "@types/html-pdf": "^3.0.3",
   
     
   "@types/node": "^20.11.20",

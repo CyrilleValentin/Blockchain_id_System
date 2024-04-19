@@ -48,7 +48,7 @@ export function StateContextProvider({ children }: { children: React.ReactNode }
     setSigner(newSigner)
     setProvider(newProvider)
 
-    const verifierContract = new ethers.Contract("0x3880c8e964f350c2b8baa5b916d0516380fa1489", abi, newSigner)
+    const verifierContract = new ethers.Contract("0xEf33214bd7DCa5fB1a14E631e32a6e2273FF8D1A", abi, newSigner)
     setContract(verifierContract)
     // }
     // verifierContract.baseURI()
