@@ -4,11 +4,14 @@ import { Card } from "@/components/cards";
 import { ethers } from "ethers";
 import React from "react";
 import abi from "@/utils/abi.json";
-
+import { useAddress } from "@thirdweb-dev/react";
+import { notFound } from "next/navigation";
 export default function Page() {
   const [contract, setContract] = React.useState<ethers.Contract | null>(null)
   const [provider, setProvider] = React.useState<ethers.providers.Web3Provider | null>(null)
   const [signer, setSigner] = React.useState<ethers.providers.JsonRpcSigner | null | undefined>(null)
+  const address=useAddress();
+  console.log(address);
 
 
   async function getAccount() {
@@ -40,6 +43,9 @@ export default function Page() {
     console.log(contract)
     const uri = await contract?.grantVerifierRole("0x8298F4605f9893F80966826B8a301c963d0FC514")
     console.log(uri)
+  }
+  if (!address){
+    return notFound()
   }
  
 

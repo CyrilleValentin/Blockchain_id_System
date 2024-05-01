@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import ReactPDF, { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import { format } from "date-fns";
 import { Calendar as CalendarIcon, Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -37,8 +36,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { StateContext } from "@/components/Provider";
 
-import { useQRCode } from "next-qrcode";
-import { AlertDialogDemo } from "@/components/qrCode";
 
 const formSchema = z.object({
   Idnum: z.string(),
@@ -63,33 +60,6 @@ const formSchema = z.object({
   }),
 });
 
-
-    // const styles = StyleSheet.create({
-    //     page: {
-    //       flexDirection: 'row',
-    //       backgroundColor: '#E4E4E4'
-    //     },
-    //     section: {
-    //       margin: 10,
-    //       padding: 10,
-    //       flexGrow: 1
-    //     }
-    //   });
-      
-    //   // Create Document Component
-    //   const MyDocument = ((data: { birthDate?: Date | undefined; madeDate?: Date | undefined; expireDate?: Date | undefined; image?: any; Idnum?: any; firstname?: string; lastname?: string; city?: string; profession?: string; gender?: string;}) => (
-    //     <Document>
-    //       <Page size="A6" style={styles.page}>
-    //         <View style={styles.section}>
-    //           <Text>Identity Card</Text>
-    //         </View>
-    //         <View style={styles.section}>
-    //           <Text>{data.firstname}</Text>
-    //         </View>
-    //       </Page>
-    //     </Document>
-    //   ));
-
 export default function ProfileForm() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [birthDate, setBirthDate] = React.useState<Date>();
@@ -99,6 +69,7 @@ export default function ProfileForm() {
   const { contract, provider, signer } = useContext(StateContext);
   const [Hash, setHash] = React.useState<String>("");
   const { Image } = useQRCode();
+ 
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -112,6 +83,8 @@ export default function ProfileForm() {
       image: "",
     },
   });
+
+  // Create Document Component
 
   async function setDocument(docHash: string, imgHash: string) {
     const registerDocTx = await contract?.registerDocument(docHash, imgHash);
@@ -135,7 +108,7 @@ export default function ProfileForm() {
       body: JSON.stringify(updatedValues),
     }).then(async (response) => {
       if (response.ok) {
-        // const data = await response.json();
+        const data = await response.json();
         // await setDocument(data?.image, data?.document).then(async (tx) => {
         //     console.log(tx.hash)
         //     setHash(tx.Hash)
@@ -152,8 +125,8 @@ export default function ProfileForm() {
         toast({
           description: "Your card has been saved.",
         });
-        MyDocument(updatedValues);
-       // ReactPDF.render(<MyDocument />, `/example.pdf`);
+       
+
         setIsLoading(false);
       } else {
         toast({
@@ -176,6 +149,7 @@ export default function ProfileForm() {
 
   return (
     <main className=" w-[55rem] h-[28rem] flex justify-center items-center flex-col">
+       
       <h1 className="text-6xl mb-8 font-bold ">ID CARD REGISTRATION</h1>
       <Form {...form}>
         <form className="w-[50rem]" onSubmit={form.handleSubmit(onSubmit)}>
@@ -378,23 +352,6 @@ export default function ProfileForm() {
               </FormItem>
             )}
           />
-          <div className="qr">
-            <Image
-              text={`QmXJqipVU8DU3Kpy5ebVsLriwRdrRbkejLhaNa8FFYf9tQ`}
-              options={{
-                type: "image/jpeg",
-                quality: 0.3,
-                errorCorrectionLevel: "M",
-                margin: 3,
-                scale: 4,
-                width: 200,
-                color: {
-                  dark: "#010599FF",
-                  light: "#FFBF60FF",
-                },
-              }}
-            />
-          </div>
 
           <div className="w-full flex justify-end">
             <Button className="w-44 " onClick={() => {}} type="submit">
