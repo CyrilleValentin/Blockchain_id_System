@@ -15,7 +15,6 @@ async function SaveCard(img: string, doc: string) {
   })
 
 }
-//"https://fuchsia-definite-fowl-804.mypinata.cloud/ipfs/QmTnHQ4B4Seztzenz7QG6jqoqZsPKyGDFBNUFUZBQzdJHf");
 
 async function getContracts() {
   const allContracts = await prisma.contract.findMany()

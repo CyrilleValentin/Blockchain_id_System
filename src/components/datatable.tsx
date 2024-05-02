@@ -64,10 +64,10 @@ export const columns: ColumnDef<Cards>[] = [
               <QrCode className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="start">
             <DropdownMenuLabel>QR CODE</DropdownMenuLabel>
             <div id="myqrcode">
-    <QRCode value="{`https://fuchsia-definite-fowl-804.mypinata.cloud/ipfs/${row.original.docHash}`}" bgColor="#fff" style={{ marginBottom: 16 }} />
+    <QRCode value={`https://fuchsia-definite-fowl-804.mypinata.cloud/ipfs/${row.original.docHash}`} bgColor="#fff" style={{ marginBottom: 16 }} />
     <Button type="submit"  onClick={() => downloadQRCode(row.original.docHash)}>
       Download
     </Button>

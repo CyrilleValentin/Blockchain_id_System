@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 import * as React from "react";
 import { format } from "date-fns";
@@ -38,7 +39,9 @@ import { StateContext } from "@/components/Provider";
 
 
 const formSchema = z.object({
-  Idnum: z.string(),
+  country: z.string({
+    required_error: "Please select a country.",
+  }),
   firstname: z.string().min(2, {
     message: "Firstname must be at least 3 characters.",
   }),
@@ -68,13 +71,13 @@ export default function ProfileForm() {
   const { toast } = useToast();
   const { contract, provider, signer } = useContext(StateContext);
   const [Hash, setHash] = React.useState<String>("");
-  const { Image } = useQRCode();
+ 
  
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      Idnum: "",
+      country: "",
       firstname: "",
       lastname: "",
       city: "",
@@ -109,19 +112,19 @@ export default function ProfileForm() {
     }).then(async (response) => {
       if (response.ok) {
         const data = await response.json();
-        // await setDocument(data?.image, data?.document).then(async (tx) => {
-        //     console.log(tx.hash)
-        //     setHash(tx.Hash)
-        //     if (tx.hash) {
-        //         const request = await fetch('/saveCard', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //             },
-        //             body: JSON.stringify(data),
-        //         })
-        //     }
-        // })
+        await setDocument(data?.image, data?.document).then(async (tx) => {
+            console.log(tx.hash)
+            setHash(tx.Hash)
+            if (tx.hash) {
+                const request = await fetch('/saveCard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+            }
+        })
         toast({
           description: "Your card has been saved.",
         });
@@ -148,7 +151,7 @@ export default function ProfileForm() {
   }
 
   return (
-    <main className=" w-[55rem] h-[28rem] flex justify-center items-center flex-col">
+    <main className=" w-[55rem] flex justify-center items-center flex-col">
        
       <h1 className="text-6xl mb-8 font-bold ">ID CARD REGISTRATION</h1>
       <Form {...form}>
@@ -156,18 +159,36 @@ export default function ProfileForm() {
           <div className="flex flex-row gap-2 mb-2 ">
             <FormField
               control={form.control}
-              name="Idnum"
+              name="country"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <Input
-                      className="text-black"
-                      placeholder=" Id Card Number "
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger className="w-[800px] mb-2">
+                    <SelectValue placeholder="Select a country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Country</SelectLabel>
+                      <SelectItem value="Bénin">Bénin</SelectItem>
+                      <SelectItem value="Burkina-Faso">Burkina Faso</SelectItem>
+                      <SelectItem value="Cap-Vert">Cap-Vert</SelectItem>
+                      <SelectItem value="Côte-d'Ivoire">Côte d'Ivoire</SelectItem>
+                      <SelectItem value="Gambie">Gambie</SelectItem>
+                      <SelectItem value="Ghana">Ghana</SelectItem>
+                      <SelectItem value="Guinée">Guinée</SelectItem>
+                      <SelectItem value="Guinée-Bissau">Guinée-Bissau</SelectItem>
+                      <SelectItem value="Liberia">Liberia</SelectItem>
+                      <SelectItem value="Mali">Mali</SelectItem>
+                      <SelectItem value="Niger">Niger</SelectItem>
+                      <SelectItem value="Nigeria">Nigeria</SelectItem>
+                      <SelectItem value="Sénégal">Sénégal</SelectItem>
+                      <SelectItem value="Sierra-Leone">Sierra Leone</SelectItem>
+                      <SelectItem value="Togo">Togo</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               )}
             />
           </div>

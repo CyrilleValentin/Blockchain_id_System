@@ -38,7 +38,7 @@ const formSchema = z.object({
 
 })
 
-export default function IssuerForm() {
+export default function VerifierForm() {
 
     const { toast } = useToast()
     const { contract, provider, signer } = useContext(StateContext)
@@ -55,10 +55,10 @@ export default function IssuerForm() {
     })
 
     async function grantRole(address: string,) {
-        const issuer = await contract?.grantIssuerRole(address)
+        const verifier = await contract?.grantVerifierRole(address)
     }
     async function revokeRole(address: string,) {
-        const issuer = await contract?.revokeIssuerRole(address)
+        const verifier = await contract?.revokeVerifierRole(address)
     }
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -68,7 +68,7 @@ export default function IssuerForm() {
 
         }
         console.log(updatedValues);
-        const request = await fetch('/issuers', {
+        const request = await fetch('/verifiers', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ export default function IssuerForm() {
     }
     return (
         <main className=" w-[55rem] h-[28rem] flex justify-center items-center flex-col">
-            <h1 className="text-5xl mb-8 font-bold ">GRANT OR REVOKE ISSUER ROLE</h1>
+            <h1 className="text-5xl mb-8 font-bold ">GRANT OR REVOKE VERIFIER ROLE</h1>
             <Form {...form}>
                 <form className="w-[50rem]" onSubmit={form.handleSubmit(onSubmit)} >
 

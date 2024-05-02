@@ -13,6 +13,7 @@ const links = [
     href: '/dashboard/card_registration'
   },
   { name: 'Issuer Role', href: '/dashboard/issuer_role' },
+  { name: 'Verifier Role', href: '/dashboard/verifier_role' },
   { name: 'Cards Hash List', href: '/dashboard/list_page' },
 ];
 
