@@ -79,6 +79,7 @@ export default function IssuerForm() {
                 const op = await response.json();
                 console.log('object:', op);
                 if (op.typeOp == 'GrantRole') {
+                    
                     grantRole(op.address)
                     toast({
                         description: "Role granted.",

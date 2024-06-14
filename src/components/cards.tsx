@@ -1,7 +1,13 @@
+import { File, FilePlus2, FileSearch2 } from 'lucide-react';
+const iconMap = {
+  verifiers: FileSearch2,
+  issuers: FilePlus2,
+  cards: File,
+};
+
 export default async function CardWrapper() {
   return (
     <>
-      {/* NOTE: comment in this code when you get to this point in the course */}
 
       {/* <Card title="Collected" value={totalPaidInvoices} type="collected" />
       <Card title="Pending" value={totalPendingInvoices} type="pending" />
@@ -21,15 +27,15 @@ export function Card({
   type,
 }: {
   title: string;
-  value: number | string;
-  type: 'verifiers' | 'cards' ;
+  value: number |string;
+  type: 'verifiers' | 'cards'| 'issuers' ;
 }) {
-  // const Icon = iconMap[type];
+   const Icon = iconMap[type];
 
   return (
-    <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
+    <div className="rounded-xl w-[10rem] bg-gray-100 p-2 shadow-sm">
       <div className="flex h-10 justify-center items-center">
-        {/* {Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null} */}
+        {Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null}
         <h3 className="ml-2 text-xl font-medium">{title}</h3>
       </div>
       <p

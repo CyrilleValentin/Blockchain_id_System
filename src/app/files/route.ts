@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from 'fs';
 import PinataClient, { PinataPinOptions, PinataConfig } from "@pinata/sdk";
-import  SaveCard  from "@/utils/db";
+
 
 function extractFileName(path: string): string {
   const regex = /[^\\\/]*$/;
